@@ -1,4 +1,5 @@
 import { applyMod } from './modifier';
+import { applyVanillaMon } from './vanillaPokemon';
 
 export type PokemonEntry = {
   name: string;
@@ -7,6 +8,8 @@ export type PokemonEntry = {
   isIgnore?: true;
   isAlt?: true;
 }
+
+export type IncompleteEntry = Partial<PokemonEntry> & { name: string };
 
 export function pokemonEntriesFrom(text: string) {
   const lines = text.split(/\n/);
@@ -20,7 +23,7 @@ export function pokemonEntriesFrom(text: string) {
     }
 
     const [name, ...mods] = line.split(/@/);
-    let entry: Partial<PokemonEntry> = { name };
+    let entry: IncompleteEntry = { name };
 
     for (const mod of mods) {
       const match = /([a-z]+)(?:\((.*?)\))?/g.exec(mod)
@@ -32,6 +35,8 @@ export function pokemonEntriesFrom(text: string) {
       const [, modName, modArgs] = match;
       entry = applyMod(modName, modArgs, entry);
     }
+
+    entry = applyVanillaMon(entry);
 
     if (!entry.types?.length) {
       throw new Error(

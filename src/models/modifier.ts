@@ -1,10 +1,10 @@
-import type { PokemonEntry } from './pokemonEntry';
+import type { PokemonEntry, IncompleteEntry } from './pokemonEntry';
 import { capitalize } from '../util/string';
 
 type ModFn = (
-  mon: Partial<PokemonEntry>, 
+  mon: IncompleteEntry, 
   args?: string,
-) => Partial<PokemonEntry>
+) => IncompleteEntry
 
 const LIST_OF_MODIFIERS: Record<string, ModFn> = {
   types(mon, args) {
@@ -27,7 +27,7 @@ const ALIASES: Record<string, string> = { type: 'types' };
 export function applyMod(
   modName: string,
   args: string | undefined, 
-  mon: Partial<PokemonEntry>
+  mon: IncompleteEntry
 ) {
   if (modName in ALIASES) {
     modName = ALIASES[modName];

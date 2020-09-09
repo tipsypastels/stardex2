@@ -10,7 +10,7 @@
 
   <div class="stat">
     <h1>{$distinctTypesCount}</h1>
-    <small>Distinct Types</small>
+    <small>Types</small>
   </div>
 </div>
 
@@ -22,10 +22,11 @@
   .stat {
     border: 1px solid var(--divider);
     padding: 0.5rem;
+    width: 4rem;
   }
 
   .stat:not(:last-child) {
-    border-right: 0;
+    margin-right: 0.5rem;
   }
 
   .stat h1 {
