@@ -1,6 +1,6 @@
-import Editor from './Editor/Editor.svelte';
-import Intro from './Intro/Intro.svelte';
-import Rundown from './Rundown/Rundown.svelte';
+import Editor from './Editor.svelte';
+import Intro from './Intro.svelte';
+import Rundown from './Rundown.svelte';
 
 const PANES = {
   intro: Intro,

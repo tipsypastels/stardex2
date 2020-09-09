@@ -1,6 +1,10 @@
 <script lang="ts">
-  import SvelteSubject from '../../util/SvelteSubject';
-  import { input, analytics } from '../../stores/pokemonStore';
+  import SvelteSubject from '../util/SvelteSubject';
+  import { 
+    input, 
+    analytics,
+    inputAutosave,
+  } from '../stores/pokemonStore';
   import { fromEvent } from 'rxjs';
   import { onMount$ } from 'svelte-rx';
   import { 
@@ -12,6 +16,8 @@
     switchMap,
     tap, 
   } from 'rxjs/operators';
+
+  $inputAutosave;
 
   let textarea: HTMLTextAreaElement;
 

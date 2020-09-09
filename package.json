@@ -12,6 +12,7 @@
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-typescript": "^4.0.0",
     "@tsconfig/svelte": "^1.0.0",
+    "@types/randomcolor": "^0.5.5",
     "@types/string-similarity": "^3.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-json": "^4.0.0",
@@ -26,6 +27,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
+    "randomcolor": "^0.6.2",
     "rxjs": "^6.6.3",
     "sirv-cli": "^1.0.0",
     "string-similarity": "^4.0.2",

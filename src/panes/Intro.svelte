@@ -1,6 +1,6 @@
 <script lang="ts">
   import { media } from 'svelte-match-media';
-  import paneStore from '../../stores/paneStore';
+  import paneStore from '../stores/paneStore';
 </script>
 
 <h1>

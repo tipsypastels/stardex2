@@ -1,22 +1,32 @@
 <script lang="ts">
-  import { analytics, distinctTypesCount } from '../../stores/pokemonStore';
+  import PieChart from '../graphs/PieChart.svelte';
+  import TypePieChart from '../graphs/TypePieChart.svelte';
+
+  import { 
+    pokemonCount, 
+    typesCount, 
+    typeDistribution, 
+  } from '../stores/pokemonStore';
 </script>
 
 <div class="stats">
   <div class="stat">
-    <h1>{$analytics.length}</h1>
+    <h1>{$pokemonCount}</h1>
     <small>Pokémon</small>
   </div>
 
   <div class="stat">
-    <h1>{$distinctTypesCount}</h1>
+    <h1>{$typesCount}</h1>
     <small>Types</small>
   </div>
 </div>
 
+<TypePieChart types={$typeDistribution} />
+
 <style>
   .stats {
     display: flex;
+    margin-bottom: 2rem;
   }
 
   .stat {
