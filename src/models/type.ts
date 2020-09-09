@@ -5,7 +5,8 @@ type VanillaType = keyof typeof VANILLA_TYPES;
 type VanillaTypeProp = keyof typeof VANILLA_TYPES[VanillaType];
 
 export const typeColor = (type: string) => 
-  pluckTypeValue(type, 'color', () => randomColor({ seed: type }));
+  pluckTypeValue(type, 'color', 
+  () => randomColor({ seed: type, format: 'rgb' }));
 
 export const typeIcon = (type: string) =>
   pluckTypeValue(type, 'icon', () => 'question-circle');

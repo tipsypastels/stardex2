@@ -9,6 +9,10 @@
   import paneStore from '../stores/paneStore';
   import toGraphSlices from '../util/toGraphSlices';
 
+  function toPane(...args: Parameters<typeof paneStore['set']>) {
+    return () => paneStore.set(...args);
+  }
+
   const sampleCode = `
     Ducklett
     Swanna
@@ -35,7 +39,6 @@
         pluck('types'),
         mergeAll(),
         toGraphSlices(),
-        startWith([]),
       ),
     ),
   );
@@ -53,7 +56,7 @@
   {#if $media.tablet}
     Start by entering some Pokémon names in the <strong>Editor</strong> pane.
   {:else}
-    Start by <button on:click={() => paneStore.set('left', 'editor')}>switching to the editor tab</button> and entering some Pokémon names!
+    Start by <button on:click={toPane('left', 'editor')}>switching to the editor tab</button> and entering some Pokémon names!
   {/if}
 
   You can leave blank lines for spacing or comment lines with <code>#</code>. Comments on the same line as code are not currently supported.
@@ -66,7 +69,7 @@
 <CodeBlock code={sampleCode} />
 
 <p>
-  You can visit the <button on:click={() => paneStore.set('right', 'rundown')}>rundown</button> tab to get totals of Pokémon, types, and other useful numbers, along with a graph of the type distribution. In the case of the above list, the graph will look like this:
+  You can visit the <button on:click={toPane('right', 'rundown')}>rundown</button> tab to get totals of Pokémon, types, and other useful numbers, along with a graph of the type distribution. In the case of the above list, the graph will look like this:
 </p>
 
 <TypePieChart types={$typeDistribution} />
