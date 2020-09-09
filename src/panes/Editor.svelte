@@ -42,12 +42,7 @@
 </script>
 
 <div class="editor">
-  <!-- svelte-ignore a11y-autofocus-->
-  <textarea 
-    autofocus 
-    bind:value={$input}
-    bind:this={textarea}
-  />
+  <textarea bind:value={$input} bind:this={textarea} />
   
   <!-- {#if $analytics.error}
     <div class="error">
@@ -72,7 +67,7 @@
     outline: none;
 
     font-size: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;;
+    font-family: "Ubuntu Mono";
 
     padding: 0.5rem;
     box-sizing: border-box;

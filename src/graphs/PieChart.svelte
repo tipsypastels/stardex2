@@ -1,6 +1,7 @@
 <script lang="ts">
   export let slices: Slice[];
   export let diameter = 300;
+  export let isDonut = true;
 
   type Slice = {
     percent: number;
@@ -50,6 +51,10 @@
   {#each slicesWithCoords as slice}
     <path d={slice.d} fill={slice.color} />
   {/each}
+
+  {#if isDonut}
+    <circle r={0.6} cx={0} cy={0} fill="white" />
+  {/if}
 </svg>
 
 <style>

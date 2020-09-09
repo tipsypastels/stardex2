@@ -1,17 +1,18 @@
 <script lang="ts">
   import PANES, { PANE_NAMES } from './panes';
+  import type { PaneSide } from './panes';
   import paneStore from '../stores/paneStore';
   import type { PaneName } from './panes';
-  export let number: 0 | 1;
+  export let side: PaneSide;
 
-  $: pane = $paneStore[number];
+  $: pane = $paneStore[side];
   $: Component = PANES[pane];
 
-  $: baseId = `pane-${number}`;
-  $: currentButtonId = `pane-button-${number}-${pane}`;
+  $: baseId = `pane-${side}`;
+  $: currentButtonId = `pane-button-${side}-${pane}`;
 
   function goto(pane: PaneName) {
-    paneStore.set(number, pane);
+    paneStore.set(side, pane);
   }
 </script>
 
@@ -19,7 +20,7 @@
   <nav 
     role="tablist" 
     class="pane-nav" 
-    aria-label={`Controls for pane ${number}`}
+    aria-label={`Controls for pane ${side}`}
   >
     {#each PANE_NAMES as thisPane}
       <button
@@ -28,7 +29,7 @@
         class:active={pane === thisPane}
         aria-selected={pane === thisPane}
         aria-controls={baseId}
-        id={`pane-button-${number}-${thisPane}`}
+        id={`pane-button-${side}-${thisPane}`}
         tabindex={-1}
         on:click={() => goto(thisPane)}
       >

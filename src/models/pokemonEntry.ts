@@ -22,7 +22,7 @@ export function pokemonEntriesFrom(text: string) {
       continue;
     }
 
-    const [name, ...mods] = line.split(/@/);
+    const [name, ...mods] = line.split(/@/).map(s => s.trim());
     let entry: IncompleteEntry = { name };
 
     for (const mod of mods) {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { media } from 'svelte-match-media';
+  import CodeBlock from '../generic/CodeBlock.svelte';
   import paneStore from '../stores/paneStore';
 </script>
 
@@ -17,7 +18,32 @@
   {:else}
     Start by <button on:click={() => paneStore.set(0, 'editor')}>switching to the editor tab</button> and entering some Pokémon names!
   {/if}
+
+  You can leave blank lines for spacing or comment lines with <code>#</code>. Comments on the same line as code are not currently supported.
 </p>
+
+<p>
+  Stardex supports regional forms, custom Pokémon, and custom types. To use any of these, you can specify a type using the <code>@type</code> modifier.
+</p>
+
+<CodeBlock code={`
+Ducklett
+Swanna
+
+# Regional Forms
+Dratini @type(Psychic)
+Dragonair @type(Psychic/Dragon)
+
+# Totally custom Pokémon and type
+Opaling @type(Fantasy)
+
+# A group modifier - applies to all Pokémon 
+# below it until the next blank line.
+[@type(Fire)]
+Pichu
+Pikachu
+Raichu
+`} />
 
 <style>
   button {
@@ -29,5 +55,13 @@
     font-size: 1rem;
     font-weight: bold;
     font-family: var(--body-font);
+  }
+
+  code {
+    font-family: 'Ubuntu Mono';
+    background-color: #222;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 4px;
   }
 </style>

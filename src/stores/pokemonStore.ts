@@ -8,6 +8,8 @@ import {
   pluck,
   tap,
   switchMap,
+  filter,
+  toArray,
 } from 'rxjs/operators';
 import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
@@ -51,6 +53,16 @@ export const typesCount = analytics.pipe(
     return of(0);
   }),
   startWith(0),
+);
+
+export const fillersCount = analytics.pipe(
+  flatMap(entries =>
+    from(entries).pipe(
+      filter(e => !!e.isFiller),
+      toArray(),
+      pluck('length'),
+    ),
+  ),
 );
 
 export const typeDistribution = analytics.pipe(

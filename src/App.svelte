@@ -4,10 +4,10 @@
 </script>
 
 <div class="app">
-  <Pane number={0} />
+  <Pane side="left" />
 
   {#if $media.tablet}
-    <Pane number={1} />
+    <Pane side="right" />
   {/if}
 </div>
 

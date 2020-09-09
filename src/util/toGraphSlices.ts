@@ -27,6 +27,7 @@ export default function toGraphSlices<T>() {
         percent: entry.count / total,
       })),
       toArray(),
+      map(result => result.sort((a, b) => b.percent - a.percent))
     );
   }
 }

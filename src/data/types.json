@@ -70,5 +70,16 @@
   "fairy": {
     "color": "rgb(238, 153, 172)",
     "icon": "sparkles"
+  },
+
+  "sound": {
+    "color": "rgb(112, 106, 106)",
+    "icon": "waveform-path",
+    "isUnlisted": true
+  },
+  "synth": {
+    "color": "rgb(130, 136, 151)",
+    "icon": "vial",
+    "isUnlisted": true
   }
 }

@@ -11,3 +11,4 @@ const PANES = {
 export default PANES;
 export const PANE_NAMES = Object.keys(PANES) as PaneName[];
 export type PaneName = keyof typeof PANES;
+export type PaneSide = 'left' | 'right';

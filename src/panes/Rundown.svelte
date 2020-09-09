@@ -1,10 +1,10 @@
 <script lang="ts">
-  import PieChart from '../graphs/PieChart.svelte';
   import TypePieChart from '../graphs/TypePieChart.svelte';
 
   import { 
     pokemonCount, 
     typesCount, 
+    fillersCount,
     typeDistribution, 
   } from '../stores/pokemonStore';
 </script>
@@ -18,6 +18,11 @@
   <div class="stat">
     <h1>{$typesCount}</h1>
     <small>Types</small>
+  </div>
+
+  <div class="stat">
+    <h1>{$fillersCount}</h1>
+    <small>Filler</small>
   </div>
 </div>
 

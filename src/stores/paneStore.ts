@@ -1,15 +1,19 @@
-import type { PaneName } from '../panes/panes';
+import type { PaneName, PaneSide } from '../panes/panes';
 import { writable } from 'svelte/store';
+import { input } from './pokemonStore';
 
-const DEFAULT_PANES: PaneName[] = ['rundown', 'editor'];
+const DEFAULT_PANES: Record<PaneSide, PaneName> = {
+  left: input.value ? 'rundown' : 'intro', 
+  right: 'editor',
+};
 
 function createPaneStore() {
   const { subscribe, update } = writable(DEFAULT_PANES);
 
-  function set(index: number, value: PaneName) {
+  function set(side: PaneSide, value: PaneName) {
     update(panes => {
-      const newPanes = [...panes];
-      newPanes[index] = value;
+      const newPanes = { ...panes };
+      newPanes[side] = value;
       return newPanes;
     });
   }
