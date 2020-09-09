@@ -1,7 +1,44 @@
 <script lang="ts">
-  import { media } from 'svelte-match-media';
   import CodeBlock from '../generic/CodeBlock.svelte';
+  import TypePieChart from '../graphs/TypePieChart.svelte';
+  
+  import { from, of } from 'rxjs';
+  import { flatMap, map, mergeAll, pluck, startWith } from 'rxjs/operators';
+  import { media } from 'svelte-match-media';
+  import { pokemonEntriesFrom } from '../models/pokemonEntry';
   import paneStore from '../stores/paneStore';
+  import toGraphSlices from '../util/toGraphSlices';
+
+  const sampleCode = `
+    Ducklett
+    Swanna
+
+    # Regional Forms
+    Dratini @type(Psychic)
+    Dragonair @type(Psychic/Dragon)
+
+    # Totally custom Pokémon and type
+    Opaling @type(Fantasy)
+
+    # A group modifier - applies to all Pokémon 
+    # below it until the next blank line.
+    [@type(Fire)]
+    Pichu
+    Pikachu
+    Raichu
+  `;
+
+  const typeDistribution = of(sampleCode).pipe(
+    map(pokemonEntriesFrom),
+    flatMap(entries => 
+      from(entries).pipe(
+        pluck('types'),
+        mergeAll(),
+        toGraphSlices(),
+        startWith([]),
+      ),
+    ),
+  );
 </script>
 
 <h1>
@@ -16,7 +53,7 @@
   {#if $media.tablet}
     Start by entering some Pokémon names in the <strong>Editor</strong> pane.
   {:else}
-    Start by <button on:click={() => paneStore.set(0, 'editor')}>switching to the editor tab</button> and entering some Pokémon names!
+    Start by <button on:click={() => paneStore.set('left', 'editor')}>switching to the editor tab</button> and entering some Pokémon names!
   {/if}
 
   You can leave blank lines for spacing or comment lines with <code>#</code>. Comments on the same line as code are not currently supported.
@@ -26,24 +63,13 @@
   Stardex supports regional forms, custom Pokémon, and custom types. To use any of these, you can specify a type using the <code>@type</code> modifier.
 </p>
 
-<CodeBlock code={`
-Ducklett
-Swanna
+<CodeBlock code={sampleCode} />
 
-# Regional Forms
-Dratini @type(Psychic)
-Dragonair @type(Psychic/Dragon)
+<p>
+  You can visit the <button on:click={() => paneStore.set('right', 'rundown')}>rundown</button> tab to get totals of Pokémon, types, and other useful numbers, along with a graph of the type distribution. In the case of the above list, the graph will look like this:
+</p>
 
-# Totally custom Pokémon and type
-Opaling @type(Fantasy)
-
-# A group modifier - applies to all Pokémon 
-# below it until the next blank line.
-[@type(Fire)]
-Pichu
-Pikachu
-Raichu
-`} />
+<TypePieChart types={$typeDistribution} />
 
 <style>
   button {
@@ -55,6 +81,8 @@ Raichu
     font-size: 1rem;
     font-weight: bold;
     font-family: var(--body-font);
+
+    cursor: pointer;
   }
 
   code {

@@ -14,16 +14,31 @@ export type IncompleteEntry = Partial<PokemonEntry> & { name: string };
 export function pokemonEntriesFrom(text: string) {
   const lines = text.split(/\n/);
   const entries: PokemonEntry[] = [];
+  let buffer: string[] = [];
 
   for (let line of lines) {
     line = line.trim();
 
-    if (!line || line.startsWith('#')) {
+    if (!line) {
+      buffer = [];
       continue;
     }
 
-    const [name, ...mods] = line.split(/@/).map(s => s.trim());
+    if (line.startsWith('#')) {
+      continue;
+    }
+
+    if (line.startsWith('[')) {
+      buffer = line.slice(1).replace(/\]$/, '').split(/@/);
+      continue;
+    }
+
+    let [name, ...mods] = line.split(/@/).map(s => s.trim());
     let entry: IncompleteEntry = { name };
+
+    if (buffer.length) {
+      mods = buffer.concat(...mods).filter(x => !!x);
+    }
 
     for (const mod of mods) {
       const match = /([a-z]+)(?:\((.*?)\))?/g.exec(mod)

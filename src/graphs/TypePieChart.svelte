@@ -5,7 +5,7 @@
 
   export let showNames = true;
   export let types: ({ value: any, percent: number, count: number })[];
-
+  
   $: slices = types.map((type) => ({
     ...type,
     icon: typeIcon(type.value),

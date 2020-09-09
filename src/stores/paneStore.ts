@@ -1,9 +1,8 @@
 import type { PaneName, PaneSide } from '../panes/panes';
 import { writable } from 'svelte/store';
-import { input } from './pokemonStore';
 
 const DEFAULT_PANES: Record<PaneSide, PaneName> = {
-  left: input.value ? 'rundown' : 'intro', 
+  left: 'intro',
   right: 'editor',
 };
 
