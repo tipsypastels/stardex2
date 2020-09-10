@@ -26,7 +26,12 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
       );
     }
 
-    const locations = args.split(/\s*,\s*/);
+    const locations = args.split(/\s*,\s*/)
+                          .map(l => {
+                            const [name, levelRange] = l.split(/\s*:\s*/);
+                            return { name, levelRange };
+                          });
+
     return { ...mon, locations };
   },
   filler(mon) {

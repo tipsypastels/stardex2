@@ -15,6 +15,7 @@
 <style>
   .app {
     --divider: #ccc;
+    --divider-light: #ddd;
     --highlight: tomato;
 
     box-sizing: border-box;

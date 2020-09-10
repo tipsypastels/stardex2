@@ -12,8 +12,10 @@ import {
   groupBy,
   catchError,
   mapTo,
+  mergeMap,
+  reduce,
 } from 'rxjs/operators';
-import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
+import { pokemonEntriesFrom, PokemonEntry, sortLocationsByName } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
 import { from, of, pipe, EMPTY } from 'rxjs';
 import currentCount from '../util/currentCount';
@@ -92,6 +94,7 @@ export const locationsCount = analytics.pipe(
         mergeAll(),
         distinct(),
         currentCount(),
+        map(i => i - 1), // subtract default
       )
     }
 
@@ -114,15 +117,32 @@ export const typeDistribution = analytics.pipe(
 export const locationDistribution = analytics.pipe(
   flatMap(entries =>
     from(entries).pipe(
-      groupBy(entry => entry.locations),
-      // mergeMap(group$ => 
-      //   group$.pipe(
-      //     reduce(
-      //       ((acc, val) => [...acc, ...val.locations]),
-      //       [...group$.key],
-      //     )
-      //   )
-      // ),
-    )
-  )
+      flatMap(entry => 
+        from(entry.locations).pipe(
+          map(location => ({ 
+            location: location.name, 
+            entry: { 
+              ...entry, 
+              levelRange: location.levelRange, 
+            }, 
+          }))
+        )  
+      ),
+      groupBy(p => p.location, p => p.entry),
+      mergeMap(group$ => 
+        group$.pipe(
+          reduce(
+            (acc, entry) => ({ ...acc, entries: [...acc.entries, entry]}),
+            ({ location: group$.key, entries: [] as PokemonEntry[] }),
+          )
+        )  
+      ),
+      toArray(),
+      map(array => 
+        array.sort((a, b) => 
+          sortLocationsByName(a.location, b.location),
+        ),
+      ),
+    ),
+  ),
 );

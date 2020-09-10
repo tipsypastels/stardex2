@@ -6,10 +6,15 @@ export type PokemonEntry = {
   name: string;
   image: string;
   types: string[];
-  locations: string[];
+  locations: LocationEntry[];
   isFiller: boolean;
   isIgnored: boolean;
   isAlt: boolean;
+}
+
+export type LocationEntry = {
+  name: string;
+  levelRange?: string;
 }
 
 export class EntryError extends Error {
@@ -79,7 +84,8 @@ export function pokemonEntriesFrom(text: string) {
   return entries;
 }
 
-const DEFAULT_IMAGE = 'https://github.com/tipsypastels/pokemonSprites/blob/master/gen5/0.png';
+const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/tipsypastels/pokemonSprites/master/gen5/0.png';
+const BASE_LOCATION_NAME = 'No location set';
 
 function makeEntry(name: string, lineNo: number): PokemonEntry {
   return {
@@ -87,9 +93,21 @@ function makeEntry(name: string, lineNo: number): PokemonEntry {
     name,
     image: DEFAULT_IMAGE,
     types: [],
-    locations: [],
+    locations: [{ name: BASE_LOCATION_NAME }],
     isFiller: false,
     isAlt: false,
     isIgnored: false,
   }
+}
+
+export function sortLocationsByName(a: string, b: string) {
+  if (a === BASE_LOCATION_NAME || a > b) {
+    return 1;
+  }
+
+  if (b === BASE_LOCATION_NAME || b > a) {
+    return -1;
+  }
+
+  return 0;
 }
