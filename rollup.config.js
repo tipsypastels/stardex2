@@ -77,6 +77,5 @@ export default {
 	],
 	watch: {
     clearScreen: false,
-    usePooling: true,
 	}
 };

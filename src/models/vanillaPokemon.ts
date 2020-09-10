@@ -39,12 +39,12 @@ export function didYouMeanVanillaMon(name: string) {
 
 // TODO: decide how nidoran works in the source json
 export function normalizeVanillaName(name: string) {
-  return name.replace(/Flabebe/i, 'Flabébé')
-             .replace(/Type Null/i, 'Type: Null')
-             .replace(/Ho ?Oh/i, 'Ho-Oh')
-             .replace(/Mr ?Mime/i, 'Mr. Mime')
-             .replace(/Mime ?Jr$/i, 'Mime Jr.')
-             .replace(/Jangmo ?o/i, 'Jangmo-o')
-             .replace(/Hakamo ?o/i, 'Hakamo-o')
-             .replace(/Kommo ?o/i, 'Kommo-o')
+  return name.replace(/^Flabebe$/i, 'Flabébé')
+             .replace(/^Type ?Null$/i, 'Type: Null')
+             .replace(/^Ho ?Oh$/i, 'Ho-Oh')
+             .replace(/^Mr ?Mime$/i, 'Mr. Mime')
+             .replace(/^Mime ?Jr$/i, 'Mime Jr.')
+             .replace(/^Jangmo ?o$/i, 'Jangmo-o')
+             .replace(/^Hakamo ?o$/i, 'Hakamo-o')
+             .replace(/^Kommo ?o$/i, 'Kommo-o')
 }
