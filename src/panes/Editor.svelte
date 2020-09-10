@@ -36,7 +36,11 @@
 </script>
 
 <div class="editor">
-  <textarea bind:value={$input} bind:this={textarea} />
+  <textarea 
+    bind:value={$input} 
+    bind:this={textarea} 
+    placeholder="Enter Pokémon names here!"
+  />
   
   {#if $inputErrors}
     <div class="error">

@@ -7,15 +7,27 @@ import Intro from '../panes/Intro.svelte';
 import Rundown from '../panes/Rundown.svelte';
 import Locations from '../panes/Locations.svelte';
 
-const PANE_TO_COMPONENT = {
-  intro: Intro,
-  editor: Editor,
-  rundown: Rundown,
-  locations: Locations,
+export const PANE_TO_METADATA = {
+  intro: {
+    icon: 'chalkboard-teacher',
+    component: Intro,
+  },
+  editor: {
+    icon: 'file-edit',
+    component: Editor,
+  },
+  rundown: {
+    icon: 'list-ol',
+    component: Rundown,
+  },
+  locations: {
+    icon: 'map-marker',
+    component: Locations,
+  },
 };
 
-export const PANE_NAMES = Object.keys(PANE_TO_COMPONENT) as PaneName[];
-export type PaneName = keyof typeof PANE_TO_COMPONENT;
+export const PANE_NAMES = Object.keys(PANE_TO_METADATA) as PaneName[];
+export type PaneName = keyof typeof PANE_TO_METADATA;
 export type PaneSide = 'left' | 'right';
 
 export class PaneSubject extends SvelteSubject<
@@ -32,7 +44,11 @@ export class PaneSubject extends SvelteSubject<
   }
 
   get component() {
-    return PANE_TO_COMPONENT[this.value.name];
+    return PANE_TO_METADATA[this.value.name].component;
+  }
+
+  get icon() {
+    return PANE_TO_METADATA[this.value.name].icon;
   }
 
   goto(name: PaneName) {

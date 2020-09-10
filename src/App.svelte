@@ -28,11 +28,12 @@
     display: grid;
     grid-template-columns: 1fr;
     column-gap: 1rem;
+
+    padding: 1rem;
   }
 
   @media screen and (min-width: 768px) {
     .app {
-      padding: 1rem;
       grid-template-columns: 1fr 1fr;
     }
   }

@@ -37,13 +37,25 @@
   .container {
     display: flex;
     align-items: center;
+    flex-direction: column;
   }
 
   ul {
+    align-self: flex-start;
     list-style: none;
   }
 
   li {
     padding: 4px 0;
+  }
+
+  @media screen and (min-width: 768px) {
+    .container {
+      flex-direction: row;
+    }
+
+    ul {
+      align-self: unset;
+    }
   }
 </style>
