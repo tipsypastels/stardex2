@@ -15,7 +15,7 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
       );
     }
 
-    const types = args.split(/\//).map(capitalize);
+    const types = args.split(/\s*\/\s*/).map(capitalize);
     return { ...mon, types };
   },
   at(mon, args) {
