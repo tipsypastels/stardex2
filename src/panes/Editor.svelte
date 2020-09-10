@@ -5,36 +5,15 @@
     inputErrors,
     inputAutosave,
   } from '../stores/pokemonStore';
-  import { EMPTY, fromEvent, iif, of, throwError, timer } from 'rxjs';
+  import { fromEvent } from 'rxjs';
   import { onMount$ } from 'svelte-rx';
   import { 
-    catchError,
-    concatMap,
-    debounceTime, 
-    filter, 
-    flatMap, 
-    map, 
-    startWith, 
-    switchMap,
-    tap, 
   } from 'rxjs/operators';
-
-  $inputAutosave;
 
   let textarea: HTMLTextAreaElement;
 
-  const test = timer(0, 100).pipe(
-    flatMap(value => 
-      iif(() => (value % 2 === 0),
-        of(value),
-        throwError(new Error(value.toString())),
-      ).pipe(
-        catchError(e => {
-          return EMPTY;
-        })
-      )
-    )
-  )
+  $inputAutosave;
+  
 
   // function getCursor() {
   //   const { selectionStart: line, value } = textarea;
@@ -92,6 +71,10 @@
     box-sizing: border-box;
 
     flex-grow: 1;
+  }
+
+  textarea::-webkit-scrollbar {
+    display: none;
   }
 
   .error {

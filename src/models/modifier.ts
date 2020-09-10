@@ -34,11 +34,15 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
   filler(mon) {
     return { ...mon, isFiller: true };
   },
+  noderive(mon) {
+    return { ...mon, isNoDerive: true };
+  }
 }
 
 const ALIASES: Record<string, string> = { 
   type: 'types',
   location: 'at',
+  nonderive: 'noderive',
 };
 
 export function applyMod(

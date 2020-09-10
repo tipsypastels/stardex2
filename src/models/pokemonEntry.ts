@@ -15,6 +15,7 @@ export type PokemonEntry = {
   isFiller: boolean;
   isIgnored: boolean;
   isAlt: boolean;
+  isNoDerive: boolean;
 }
 
 export type LocationEntry = {
@@ -76,13 +77,20 @@ function finalizeEntry(_entry: PokemonEntry) {
   const entry = applyVanillaMon(_entry);
 
   if (!entry.types.length) {
-    const didYouMean = didYouMeanVanillaMon(entry.name);
+    const didYouMean = didYouMeanVanillaMon(entry);
 
     if (didYouMean) {
       throw new EntryError(
         entry.lineNo,
         `Unknown Pokémon: <code>${entry.name}</code>. Did you mean <code>${didYouMean}</code>?`,
       );
+    } 
+    
+    if (entry.isNoDerive) {
+      throw new EntryError(
+        entry.lineNo,
+        `Non-derived Pokémon <code>${entry.name}</code> must explicitly specify types with with the <code>type</code> modifier. `,
+      )
     }
 
     throw new EntryError(
@@ -106,5 +114,6 @@ function makeEntry(name: string, lineNo: number): PokemonEntry {
     isFiller: false,
     isAlt: false,
     isIgnored: false,
+    isNoDerive: false,
   }
 }

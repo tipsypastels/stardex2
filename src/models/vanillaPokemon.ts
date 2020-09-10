@@ -13,6 +13,10 @@ export const vanillaMonsByName = LIST_OF_MONS.reduce<MonsByName>(
 export const vanillaMonNames = Object.keys(vanillaMonsByName);
 
 export function applyVanillaMon(_entry: PokemonEntry) {
+  if (_entry.isNoDerive) {
+    return _entry;
+  }
+  
   const vanillaMon = vanillaMonsByName[_entry.name.toLowerCase()];
 
   if (!vanillaMon) {
@@ -29,7 +33,11 @@ export function applyVanillaMon(_entry: PokemonEntry) {
   return entry;
 }
 
-export function didYouMeanVanillaMon(name: string) {
+export function didYouMeanVanillaMon({ name, isNoDerive }: PokemonEntry) {
+  if (isNoDerive) {
+    return;
+  }
+
   const result = findBestMatch(name.toLowerCase(), vanillaMonNames);
 
   if (result.bestMatch.rating > 0.8) {

@@ -2,9 +2,13 @@
   import { media } from 'svelte-match-media';
   import Pane from './panes/Pane.svelte';
   import { leftPane, rightPane } from './stores/paneStore';
+
+  let height: number;
 </script>
 
-<div class="app">
+<svelte:window bind:innerHeight={height} />
+
+<div class="app" style="height: {height}px;">
   <Pane pane={leftPane} />
 
   {#if $media.tablet}
@@ -20,7 +24,6 @@
 
     box-sizing: border-box;
     position: relative;
-    height: 100%;
 
     display: grid;
     grid-template-columns: 1fr;
