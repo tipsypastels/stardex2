@@ -2,27 +2,28 @@ import { PokemonEntry, EntryError } from './pokemonEntry';
 import { capitalize } from '../util/string';
 
 type ModFn = (
-  mon: PokemonEntry, 
+  mon: PokemonEntry,
+  usedModName: string, 
   args?: string,
 ) => PokemonEntry
 
 const LIST_OF_MODIFIERS: Record<string, ModFn> = {
-  types(mon, args) {
+  types(mon, usedModName, args) {
     if (!args) {
       throw new EntryError(
         mon.lineNo,
-        `<code>type</code> requires arguments. Example: <code>- type Fire/Flying</code>.`
+        `<code>${usedModName}</code> requires arguments. Example: <code>- ${usedModName} Fire/Flying</code>.`
       );
     }
 
     const types = args.split(/\s*\/\s*/).map(capitalize);
     return { ...mon, types };
   },
-  at(mon, args) {
+  at(mon, usedModName, args) {
     if (!args) {
       throw new EntryError(
         mon.lineNo,
-        `<code>at</code> requires arguments. Example: <code>- at Route 1, 5-7</code>.`
+        `<code>${usedModName}</code> requires arguments. Example: <code>- ${usedModName} Route 1, 5-7</code>.`
       );
     }
 
@@ -35,25 +36,23 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
   },
 }
 
-const ALIASES: Record<string, string> = { type: 'types' };
+const ALIASES: Record<string, string> = { 
+  type: 'types',
+  location: 'at',
+};
 
 export function applyMod(
-  modName: string,
+  usedModName: string,
   args: string | undefined, 
   mon: PokemonEntry
 ) {
-  if (modName in ALIASES) {
-    modName = ALIASES[modName];
-  }
+  const modName = (usedModName in ALIASES)
+    ? ALIASES[usedModName]
+    : usedModName;
 
   if (modName in LIST_OF_MODIFIERS) {
     const func = LIST_OF_MODIFIERS[modName];
-
-    if (func.length === 2) {
-      return func(mon, args);
-    } else {
-      return func(mon);
-    }
+    return func(mon, usedModName, args);
   }
 
   throw new EntryError(
