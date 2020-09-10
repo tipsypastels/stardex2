@@ -56,10 +56,10 @@
     background-color: var(--highlight);
     color: white;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
 
-    height: 45px;
-    width: 45px;
+    height: 55px;
+    width: 55px;
     
     display: flex;
     align-items: center;

@@ -57,7 +57,7 @@
 <style>
   .editor {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
 
     width: 100%;
     height: 100%;
@@ -90,5 +90,11 @@
   .error h4 {
     margin-top: 0;
     margin-bottom: 0.25rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    .editor {
+      flex-direction: column;
+    }
   }
 </style>
