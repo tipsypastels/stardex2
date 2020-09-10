@@ -92,6 +92,7 @@ export const locationsCount = analytics.pipe(
       return from(entries).pipe(
         pluck('locations'),
         mergeAll(),
+        pluck('name'),
         distinct(),
         currentCount(),
       )
