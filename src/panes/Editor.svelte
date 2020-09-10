@@ -39,6 +39,9 @@
   <textarea 
     bind:value={$input} 
     bind:this={textarea} 
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck={false}
     placeholder="Enter Pokémon names here!"
   />
   
