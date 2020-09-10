@@ -15,7 +15,7 @@ import {
   mergeMap,
   reduce,
 } from 'rxjs/operators';
-import { pokemonEntriesFrom, PokemonEntry, sortLocationsByName } from '../models/pokemonEntry';
+import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
 import { from, of, pipe, EMPTY } from 'rxjs';
 import currentCount from '../util/currentCount';
@@ -94,7 +94,6 @@ export const locationsCount = analytics.pipe(
         mergeAll(),
         distinct(),
         currentCount(),
-        map(i => i - 1), // subtract default
       )
     }
 
@@ -140,9 +139,18 @@ export const locationDistribution = analytics.pipe(
       toArray(),
       map(array => 
         array.sort((a, b) => 
-          sortLocationsByName(a.location, b.location),
+          a.location.localeCompare(b.location),
         ),
       ),
+    ),
+  ),
+);
+
+export const locationUnsetEntries = analytics.pipe(
+  flatMap(entries =>
+    from(entries).pipe(
+      filter(entry => entry.locations.length === 0),
+      toArray(),
     ),
   ),
 );

@@ -91,15 +91,10 @@ function finalizeEntry(_entry: PokemonEntry) {
     );
   }
 
-  if (!entry.locations.length) {
-    entry.locations = [{ name: BASE_LOCATION_NAME }];
-  }
-
   return entry;
 }
 
 const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/tipsypastels/pokemonSprites/master/gen5/0.png';
-const BASE_LOCATION_NAME = 'No location set';
 
 function makeEntry(name: string, lineNo: number): PokemonEntry {
   return {
@@ -112,16 +107,4 @@ function makeEntry(name: string, lineNo: number): PokemonEntry {
     isAlt: false,
     isIgnored: false,
   }
-}
-
-export function sortLocationsByName(a: string, b: string) {
-  if (a === BASE_LOCATION_NAME || a > b) {
-    return 1;
-  }
-
-  if (b === BASE_LOCATION_NAME || b > a) {
-    return -1;
-  }
-
-  return 0;
 }

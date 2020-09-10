@@ -1,10 +1,13 @@
 <script lang="ts">
 import CodeBlock from '../generic/CodeBlock.svelte';
   import EntryListing from '../generic/EntryListing.svelte';
-  import { locationDistribution } from '../stores/pokemonStore';
+  import { 
+    locationDistribution, 
+    locationUnsetEntries,
+  } from '../stores/pokemonStore';
 </script>
 
-{#if $locationDistribution.length > 1}
+{#if $locationDistribution.length}
   {#each $locationDistribution as { location, entries } (location)}
     <div class="location">
       <h3 class="location-title">
@@ -20,6 +23,20 @@ import CodeBlock from '../generic/CodeBlock.svelte';
       </div>
     </div>
   {/each}
+
+  {#if $locationUnsetEntries.length}
+    <div class="location">
+      <h3 class="location-title">
+        <span>Pokémon without locations</span>
+      </h3>
+
+      <div class="entries">
+        {#each $locationUnsetEntries as entry (entry.name)}
+          <EntryListing entry={entry} />
+        {/each}
+      </div>
+    </div>
+  {/if}
 {:else}
     <div class="no-locations">
       <h3 class="no-locations-title">

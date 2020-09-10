@@ -18,7 +18,7 @@
 
   <div class="stat">
     <h1>{$typesCount}</h1>
-    <small>Types</small>
+    <small>{$typesCount === 1 ? 'Type' : 'Types'}</small>
   </div>
 
   <div class="stat">
@@ -28,7 +28,7 @@
 
   <div class="stat">
     <h1>{$locationsCount}</h1>
-    <small>Locations</small>
+    <small>{$locationsCount === 1 ? 'Location' : 'Locations'}</small>
   </div>
 </div>
 
