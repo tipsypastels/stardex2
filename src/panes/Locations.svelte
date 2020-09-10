@@ -27,12 +27,15 @@ import CodeBlock from '../generic/CodeBlock.svelte';
       </h3>
 
       <p>
-        If you want to list Pokémon locations, define them for all or some of your Pokémon using the <code>@at</code> modifier. Here's an example.
+        If you want to list Pokémon locations, define them for all or some of your Pokémon using the <code>at</code> modifier. Here's an example.
       </p>
 
       <CodeBlock code={`
-        Ducklett @at(Route 53, Mossy Pond)
-        Swanna @at(Mossy Pond)
+        Ducklett 
+        - at Route 53, 
+        - at Mossy Pond
+        Swanna
+        - at Mossy Pond
       `} />
 
       <p>
@@ -40,8 +43,11 @@ import CodeBlock from '../generic/CodeBlock.svelte';
       </p>
 
       <CodeBlock code={`
-        Ducklett @at(Route 53 : 1-3, Mossy Pond : 5-7)
-        Swanna @at(Mossy Pond : 7-9)
+        Ducklett 
+        - at Route 53, 1-3
+        - at Mossy Pond, 5-7
+        Swanna
+        - at Mossy Pond, 5-7
       `} />
     </div>
 {/if}

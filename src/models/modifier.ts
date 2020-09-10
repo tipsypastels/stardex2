@@ -11,7 +11,7 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
     if (!args) {
       throw new EntryError(
         mon.lineNo,
-        `<code>@type</code> requires arguments. Example: <code>@type(Fire/Flying)</code>.`
+        `<code>type</code> requires arguments. Example: <code>- type Fire/Flying</code>.`
       );
     }
 
@@ -22,16 +22,12 @@ const LIST_OF_MODIFIERS: Record<string, ModFn> = {
     if (!args) {
       throw new EntryError(
         mon.lineNo,
-        `<code>@at</code> requires arguments. Example: <code>@at(Route1, Route2)</code>`
+        `<code>at</code> requires arguments. Example: <code>- at Route 1, 5-7</code>.`
       );
     }
 
-    const locations = args.split(/\s*,\s*/)
-                          .map(l => {
-                            const [name, levelRange] = l.split(/\s*:\s*/);
-                            return { name, levelRange };
-                          });
-
+    const [name, levelRange] = args.split(/\s*,\s*/);
+    const locations = mon.locations.concat({ name, levelRange });
     return { ...mon, locations };
   },
   filler(mon) {

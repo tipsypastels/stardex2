@@ -10,22 +10,21 @@
   import toGraphSlices from '../util/toGraphSlices';
 
   const sampleCode = `
+    # Some official Pokémon
     Ducklett
     Swanna
 
-    # Regional Forms
-    Dratini @type(Psychic)
-    Dragonair @type(Psychic/Dragon)
+    # Regional forms
+    Dratini
+    - type Psychic
+    Dragonair
+    - type Psychic/Dragon
+    Dragonite
+    - type Psychic/Dragon
 
     # Totally custom Pokémon and type
-    Opaling @type(Fantasy)
-
-    # A group modifier - applies to all Pokémon 
-    # below it until the next blank line.
-    [@type(Fire)]
-    Pichu
-    Pikachu
-    Raichu
+    Opaling
+    - type Fantasy
   `;
 
   const typeDistribution = of(sampleCode).pipe(
@@ -55,11 +54,11 @@
     Start by <button on:click={() => leftPane.goto('editor')}>switching to the editor tab</button> and entering some Pokémon names!
   {/if}
 
-  You can leave blank lines for spacing or comment lines with <code>#</code>. Comments on the same line as code are not currently supported.
+  You can leave blank lines for spacing or comment lines with <code>#</code>
 </p>
 
 <p>
-  Stardex supports regional forms, custom Pokémon, and custom types. To use any of these, you can specify a type using the <code>@type</code> modifier.
+  Stardex supports regional forms, custom Pokémon, and custom types. To use any of these, you can specify a type using the <em>modifier</em> syntax, written as a line with a dash after a Pokémon name.
 </p>
 
 <CodeBlock code={sampleCode} />
@@ -72,7 +71,8 @@
 
 <style>
   button {
-    background-color: rgba(255, 99, 71, 0.3);
+    background-color: transparent;
+    color: tomato;
     border: none;
     outline: none;
     padding: 0;
@@ -82,13 +82,5 @@
     font-family: var(--body-font);
 
     cursor: pointer;
-  }
-
-  code {
-    font-family: 'Ubuntu Mono';
-    background-color: #222;
-    color: white;
-    padding: 2px 4px;
-    border-radius: 4px;
   }
 </style>

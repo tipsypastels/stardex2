@@ -1,5 +1,6 @@
 import { applyMod } from './modifier';
 import { applyVanillaMon } from './vanillaPokemon';
+import { splitOnFirst } from '../util/string';
 
 export type PokemonEntry = {
   lineNo: number;
@@ -29,59 +30,59 @@ export class EntryError extends Error {
 export function pokemonEntriesFrom(text: string) {
   const lines = text.split(/\n/);
   const entries: PokemonEntry[] = [];
-  let buffer: string[] = [];
+  let currentEntry: PokemonEntry | null = null;
 
   for (let lineNo = 0; lineNo < lines.length; lineNo++) {
-    const line = lines[lineNo].trim();
-
+    const line = lines[lineNo].split(/#/)[0].trim();
+    
     if (!line) {
-      buffer = [];
       continue;
     }
 
-    if (line.startsWith('#')) {
-      continue;
-    }
-
-    if (line.startsWith('[')) {
-      buffer = line.slice(1).replace(/\]$/, '').split(/@/);
-      continue;
-    }
-
-    let [name, ...mods] = line.split(/@/).map(s => s.trim());
-    let entry = makeEntry(name, lineNo);
-
-    if (buffer.length) {
-      mods = buffer.concat(...mods).filter(x => !!x);
-    }
-
-    for (const mod of mods) {
-      const match = /([a-z]+)(?:\((.*?)\))?/g.exec(mod)
-      
-      if (!match) {
+    if (line.startsWith('-')) {
+      if (currentEntry) {
+        const mod = line.replace(/^-\s*/, '');
+        const [modName, modArgs] = splitOnFirst(mod, /\s+/, ' ');
+        
+        currentEntry = applyMod(modName, modArgs, currentEntry);
+        continue;
+      } else {
         throw new EntryError(
-          lineNo, 
-          `Invalid usage of modifier <code>${mod}</code>`,
+          lineNo,
+          `Modifier was used without a Pokémon to attach it to.`
         );
       }
-
-      const [, modName, modArgs] = match;
-      entry = applyMod(modName, modArgs, entry);
     }
 
-    entry = applyVanillaMon(entry);
-
-    if (!entry.types?.length) {
-      throw new EntryError(
-        lineNo,
-        `Unknown Pokémon: <code>${name}</code>. If this is a custom Pokémon, explicitly list its types as <code>${name} @type(Type1/Type2)</code>`
-      );
+    if (currentEntry) {
+      entries.push(finalizeEntry(currentEntry));
     }
 
-    entries.push(entry as PokemonEntry);
+    currentEntry = makeEntry(line, lineNo);
+  }
+
+  if (currentEntry) { // last entry
+    entries.push(finalizeEntry(currentEntry));
   }
 
   return entries;
+}
+
+function finalizeEntry(_entry: PokemonEntry) {
+  const entry = applyVanillaMon(_entry);
+
+  if (!entry.types.length) {
+    throw new EntryError(
+      entry.lineNo,
+      `Unknown Pokémon: <code>${entry.name}</code>. If this is a custom Pokémon, explicitly list its types as <code>${entry.name}<br />- type(Type1/Type2)</code>.`,
+    );
+  }
+
+  if (!entry.locations.length) {
+    entry.locations = [{ name: BASE_LOCATION_NAME }];
+  }
+
+  return entry;
 }
 
 const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/tipsypastels/pokemonSprites/master/gen5/0.png';
@@ -93,7 +94,7 @@ function makeEntry(name: string, lineNo: number): PokemonEntry {
     name,
     image: DEFAULT_IMAGE,
     types: [],
-    locations: [{ name: BASE_LOCATION_NAME }],
+    locations: [],
     isFiller: false,
     isAlt: false,
     isIgnored: false,
