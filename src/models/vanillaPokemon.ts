@@ -29,7 +29,10 @@ export function applyVanillaMon(_entry: PokemonEntry) {
     entry.types = vanillaMon.types;
   }
   
-  entry.image = vanillaMon.image;
+  if (!entry.image) {
+    entry.image = vanillaMon.image;
+  }
+  
   return entry;
 }
 

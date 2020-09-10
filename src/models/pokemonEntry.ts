@@ -1,4 +1,4 @@
-import { applyMod } from './modifier';
+import { applyMod } from './modifiers/list';
 import { 
   applyVanillaMon, 
   didYouMeanVanillaMon, 
@@ -9,7 +9,7 @@ import { splitOnFirst } from '../util/string';
 export type PokemonEntry = {
   lineNo: number;
   name: string;
-  image: string;
+  image: string | undefined;
   types: string[];
   locations: LocationEntry[];
   isFiller: boolean;
@@ -77,6 +77,10 @@ export function pokemonEntriesFrom(text: string) {
 function finalizeEntry(_entry: PokemonEntry) {
   const entry = applyVanillaMon(_entry);
 
+  if (!entry.image) {
+    entry.image = DEFAULT_IMAGE;
+  }
+
   if (!entry.types.length) {
     const didYouMean = didYouMeanVanillaMon(entry);
 
@@ -99,7 +103,7 @@ function finalizeEntry(_entry: PokemonEntry) {
       `Unknown Pokémon: <code>${entry.name}</code>.<br />If this is a custom Pokémon, explicitly list its types with the <code>type</code> modifier.`,
     );
   }
-
+  
   return entry;
 }
 
@@ -109,7 +113,7 @@ function makeEntry(name: string, lineNo: number): PokemonEntry {
   return {
     lineNo,
     name: normalizeVanillaName(name),
-    image: DEFAULT_IMAGE,
+    image: undefined,
     types: [],
     locations: [],
     isFiller: false,
