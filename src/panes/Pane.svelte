@@ -1,39 +1,35 @@
 <script lang="ts">
-  import PANES, { PANE_NAMES } from './panes';
-  import type { PaneSide } from './panes';
-  import paneStore from '../stores/paneStore';
+  import PANE_TO_COMPONENT, { PANE_NAMES } from './panes';
+  import type { PaneSubject } from '../stores/paneStore';
   import type { PaneName } from './panes';
-  export let side: PaneSide;
 
-  $: pane = $paneStore[side];
-  $: Component = PANES[pane];
+  export let pane: PaneSubject;
 
-  $: baseId = `pane-${side}`;
-  $: currentButtonId = `pane-button-${side}-${pane}`;
+  const paneLocalStorage = pane.storeLocally();
+  $paneLocalStorage; // subscribe
 
-  function goto(pane: PaneName) {
-    paneStore.set(side, pane);
-  }
+  $: baseId = `pane-${$pane.side}`;
+  $: currentButtonId = `pane-button-${$pane.side}-${$pane.name}`;
 </script>
 
 <section class="pane">
   <nav 
     role="tablist" 
     class="pane-nav" 
-    aria-label={`Controls for pane ${side}`}
+    aria-label="Controls for pane {$pane.side}"
   >
-    {#each PANE_NAMES as thisPane}
+    {#each PANE_NAMES as name}
       <button
         role="tab"
         class="pane-button"
-        class:active={pane === thisPane}
-        aria-selected={pane === thisPane}
+        class:active={$pane.name === name}
+        aria-selected={$pane.name === name}
         aria-controls={baseId}
-        id={`pane-button-${side}-${thisPane}`}
+        id="pane-button-{$pane.side}-{name}"
         tabindex={-1}
-        on:click={() => goto(thisPane)}
+        on:click={() => pane.goto(name)}
       >
-        {thisPane}
+        {name}
       </button>
     {/each}
   </nav>
@@ -45,7 +41,7 @@
     tabIndex={0}
     id={baseId}
   >
-    <svelte:component this={Component} />
+    <svelte:component this={pane.component} />
   </div>
 </section>
 

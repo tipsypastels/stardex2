@@ -2,22 +2,32 @@ import { applyMod } from './modifier';
 import { applyVanillaMon } from './vanillaPokemon';
 
 export type PokemonEntry = {
+  lineNo: number;
   name: string;
+  image: string;
   types: string[];
-  isFiller?: true;
-  isIgnore?: true;
-  isAlt?: true;
+  locations: string[];
+  isFiller: boolean;
+  isIgnored: boolean;
+  isAlt: boolean;
 }
 
-export type IncompleteEntry = Partial<PokemonEntry> & { name: string };
+export class EntryError extends Error {
+  line: number;
+
+  constructor(line: number, message: string) {
+    super(message);
+    this.line = line;
+  }
+}
 
 export function pokemonEntriesFrom(text: string) {
   const lines = text.split(/\n/);
   const entries: PokemonEntry[] = [];
   let buffer: string[] = [];
 
-  for (let line of lines) {
-    line = line.trim();
+  for (let lineNo = 0; lineNo < lines.length; lineNo++) {
+    const line = lines[lineNo].trim();
 
     if (!line) {
       buffer = [];
@@ -34,7 +44,7 @@ export function pokemonEntriesFrom(text: string) {
     }
 
     let [name, ...mods] = line.split(/@/).map(s => s.trim());
-    let entry: IncompleteEntry = { name };
+    let entry = makeEntry(name, lineNo);
 
     if (buffer.length) {
       mods = buffer.concat(...mods).filter(x => !!x);
@@ -44,7 +54,10 @@ export function pokemonEntriesFrom(text: string) {
       const match = /([a-z]+)(?:\((.*?)\))?/g.exec(mod)
       
       if (!match) {
-        throw new SyntaxError(`Invalid usage of modifier ${mod}`);
+        throw new EntryError(
+          lineNo, 
+          `Invalid usage of modifier <code>${mod}</code>`,
+        );
       }
 
       const [, modName, modArgs] = match;
@@ -54,8 +67,9 @@ export function pokemonEntriesFrom(text: string) {
     entry = applyVanillaMon(entry);
 
     if (!entry.types?.length) {
-      throw new Error(
-        `Can't infer types for Pokémon \"${name}\". List them explicitly as the desired type, such as ${name} @types(Fire/Fighting)`
+      throw new EntryError(
+        lineNo,
+        `Unknown Pokémon: <code>${name}</code>. If this is a custom Pokémon, explicitly list its types as <code>${name} @type(Type1/Type2)</code>`
       );
     }
 
@@ -63,4 +77,19 @@ export function pokemonEntriesFrom(text: string) {
   }
 
   return entries;
+}
+
+const DEFAULT_IMAGE = 'https://github.com/tipsypastels/pokemonSprites/blob/master/gen5/0.png';
+
+function makeEntry(name: string, lineNo: number): PokemonEntry {
+  return {
+    lineNo,
+    name,
+    image: DEFAULT_IMAGE,
+    types: [],
+    locations: [],
+    isFiller: false,
+    isAlt: false,
+    isIgnored: false,
+  }
 }

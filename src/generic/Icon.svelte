@@ -4,4 +4,4 @@
   export let fw = true;
 </script>
 
-<i class={`${group} fa-${name}`} class:fa-fw={fw} />
+<i class="{group} fa-{name}" class:fa-fw={fw} />

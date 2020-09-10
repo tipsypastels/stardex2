@@ -1,24 +1,47 @@
-import type { PaneName, PaneSide } from '../panes/panes';
-import { writable } from 'svelte/store';
+import type { PaneName } from '../panes/panes';
+import SvelteSubject from '../util/SvelteSubject';
+import storeLocally from '../util/storeLocally';
+import PANE_TO_COMPONENT from '../panes/panes';
+import { pluck } from 'rxjs/operators';
 
-const DEFAULT_PANES: Record<PaneSide, PaneName> = {
-  left: 'intro',
-  right: 'editor',
-};
+type PaneSide = 'left' | 'right';
 
-function createPaneStore() {
-  const { subscribe, update } = writable(DEFAULT_PANES);
-
-  function set(side: PaneSide, value: PaneName) {
-    update(panes => {
-      const newPanes = { ...panes };
-      newPanes[side] = value;
-      return newPanes;
-    });
+export class PaneSubject extends SvelteSubject<
+  {
+    name: PaneName;
+    side: PaneSide;
+    lsKey: string;
+  }
+> {
+  constructor(side: PaneSide, fallback: PaneName) {
+    const lsKey = `stardex2-pane-${side}`;
+    const name = (localStorage.getItem(lsKey) || fallback) as PaneName;
+    super({ side, lsKey, name });
   }
 
-  return { subscribe, set };
+  get name() {
+    return this.value.name;
+  }
+
+  get side() {
+    return this.value.side;
+  }
+
+  get component() {
+    return PANE_TO_COMPONENT[this.name];
+  }
+
+  goto(name: PaneName) {
+    this.next({ ...this.value, name });
+  }
+
+  storeLocally() {
+    return this.pipe(
+      pluck('name'),
+      storeLocally(this.value.lsKey),
+    );
+  }
 }
 
-const paneStore = createPaneStore();
-export default paneStore;
+export const leftPane = new PaneSubject('left', 'intro');
+export const rightPane = new PaneSubject('right', 'editor');

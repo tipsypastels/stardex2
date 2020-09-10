@@ -1,13 +1,14 @@
 <script lang="ts">
   import { media } from 'svelte-match-media';
   import Pane from './panes/Pane.svelte';
+  import { leftPane, rightPane } from './stores/paneStore';
 </script>
 
 <div class="app">
-  <Pane side="left" />
+  <Pane pane={leftPane} />
 
   {#if $media.tablet}
-    <Pane side="right" />
+    <Pane pane={rightPane} />
   {/if}
 </div>
 

@@ -6,16 +6,18 @@ import {
   distinct, 
   startWith,
   pluck,
-  tap,
   switchMap,
   filter,
   toArray,
+  groupBy,
+  catchError,
 } from 'rxjs/operators';
 import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
-import { from, of } from 'rxjs';
+import { from, of, pipe, EMPTY } from 'rxjs';
 import currentCount from '../util/currentCount';
 import toGraphSlices from '../util/toGraphSlices';
+import storeLocally from '../util/storeLocally';
 
 const KEY = 'stardex2-entries';
 
@@ -26,12 +28,28 @@ function getInitialValue() {
 export const input = new SvelteSubject(getInitialValue());
 
 export const inputAutosave = input.pipe(
-  tap(input => localStorage.setItem(KEY, input)),
+  storeLocally(KEY),
+);
+
+export const inputErrors = input.pipe(
+  distinctUntilPause(500),
+  flatMap(value => 
+    of(value).pipe(
+      map(pokemonEntriesFrom),
+      map(() => null), // we don't need the value
+      catchError(e => of(e)),
+    )  
+  ),
+  startWith(null),
 );
 
 export const analytics = input.pipe(
-  distinctUntilPause(1000),
-  map(pokemonEntriesFrom),
+  flatMap(value => 
+    of(value).pipe(
+      map(pokemonEntriesFrom),
+      catchError(() => EMPTY),
+    )  
+  ),
   startWith([] as PokemonEntry[]),
 );
 
@@ -65,6 +83,22 @@ export const fillersCount = analytics.pipe(
   ),
 );
 
+export const locationsCount = analytics.pipe(
+  switchMap(entries => {
+    if (entries.length) {
+      return from(entries).pipe(
+        pluck('locations'),
+        mergeAll(),
+        distinct(),
+        currentCount(),
+      )
+    }
+
+    return of(0);
+  }),
+  startWith(0),
+)
+
 export const typeDistribution = analytics.pipe(
   flatMap(entries => 
     from(entries).pipe(
@@ -74,4 +108,20 @@ export const typeDistribution = analytics.pipe(
       startWith([]),
     ),
   ),
+);
+
+export const locationDistribution = analytics.pipe(
+  flatMap(entries =>
+    from(entries).pipe(
+      groupBy(entry => entry.locations),
+      // mergeMap(group$ => 
+      //   group$.pipe(
+      //     reduce(
+      //       ((acc, val) => [...acc, ...val.locations]),
+      //       [...group$.key],
+      //     )
+      //   )
+      // ),
+    )
+  )
 );

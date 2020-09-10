@@ -87,7 +87,7 @@
   }
 </script>
 
-<svg viewBox="-1 -1 2 2" style={`height: ${diameter}px`}>
+<svg viewBox="-1 -1 2 2" style="height: {diameter}px">
   {#each slicesWithCoords as slice}
     <path d={slice.d} style={rgbToStyle(slice.color)} />
   {/each}

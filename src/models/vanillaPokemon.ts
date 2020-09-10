@@ -1,19 +1,27 @@
 import LIST_OF_MONS from '../data/mons.json';
+import type { PokemonEntry } from './pokemonEntry';
 
-export function applyVanillaMon(mon: { name: string }) {
-  const entry = getMonEntry(mon.name);
+export function applyVanillaMon(_entry: PokemonEntry) {
+  const vanillaMon = getVanillaMon(_entry.name);
 
-  if (!entry) {
-    return mon;
+  if (!vanillaMon) {
+    return _entry;
   }
 
-  return { ...entry, ...mon };
+  const entry = { ..._entry };
+
+  if (!entry.types.length) {
+    entry.types = vanillaMon.types;
+  }
+  
+  entry.image = vanillaMon.image;
+  return entry;
 }
 
 type Mon = typeof LIST_OF_MONS[number];
 const MEMO = new Map<string, Mon>();
 
-function getMonEntry(name: string) {
+function getVanillaMon(name: string) {
   return upsert(MEMO, name, searchForMon);
 }
 

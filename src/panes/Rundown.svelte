@@ -5,6 +5,7 @@
     pokemonCount, 
     typesCount, 
     fillersCount,
+    locationsCount,
     typeDistribution, 
   } from '../stores/pokemonStore';
 </script>
@@ -23,6 +24,11 @@
   <div class="stat">
     <h1>{$fillersCount}</h1>
     <small>Filler</small>
+  </div>
+
+  <div class="stat">
+    <h1>{$locationsCount}</h1>
+    <small>Locations</small>
   </div>
 </div>
 

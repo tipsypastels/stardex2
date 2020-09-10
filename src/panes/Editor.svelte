@@ -2,15 +2,17 @@
   import SvelteSubject from '../util/SvelteSubject';
   import { 
     input, 
-    analytics,
+    inputErrors,
     inputAutosave,
   } from '../stores/pokemonStore';
-  import { fromEvent } from 'rxjs';
+  import { EMPTY, fromEvent, iif, of, throwError, timer } from 'rxjs';
   import { onMount$ } from 'svelte-rx';
   import { 
+    catchError,
     concatMap,
     debounceTime, 
     filter, 
+    flatMap, 
     map, 
     startWith, 
     switchMap,
@@ -21,34 +23,51 @@
 
   let textarea: HTMLTextAreaElement;
 
-  function getCursor() {
-    const { selectionStart: line, value } = textarea;
-    const entries = value.substr(0, line).split(/\n/);
-    const text = entries[entries.length - 1];
-    return { text, line: entries.length };
-  }
+  const test = timer(0, 100).pipe(
+    flatMap(value => 
+      iif(() => (value % 2 === 0),
+        of(value),
+        throwError(new Error(value.toString())),
+      ).pipe(
+        catchError(e => {
+          return EMPTY;
+        })
+      )
+    )
+  )
 
-  const shiftKeyEvent = onMount$.pipe<void>(
-    concatMap(() => 
-      fromEvent<KeyboardEvent>(textarea, 'keypress').pipe(
-        filter(e => e.key === 'Enter' && e.ctrlKey),
-        map(getCursor),
-        tap(console.log),
-      ),
-    ),
-  );
+  // function getCursor() {
+  //   const { selectionStart: line, value } = textarea;
+  //   const entries = value.substr(0, line).split(/\n/);
+  //   const text = entries[entries.length - 1];
+  //   return { text, line: entries.length };
+  // }
 
-  $shiftKeyEvent; // bind
+  // const shiftKeyEvent = onMount$.pipe<void>(
+  //   concatMap(() => 
+  //     fromEvent<KeyboardEvent>(textarea, 'keypress').pipe(
+  //       filter(e => e.key === 'Enter' && e.ctrlKey),
+  //       map(getCursor),
+  //       tap(console.log),
+  //     ),
+  //   ),
+  // );
+
+  // $shiftKeyEvent; // bind
 </script>
 
 <div class="editor">
   <textarea bind:value={$input} bind:this={textarea} />
   
-  <!-- {#if $analytics.error}
+  {#if $inputErrors}
     <div class="error">
-      {$analytics.error}    
+      <h4>
+        Line {$inputErrors.line + 1}
+      </h4>
+      
+      {@html $inputErrors.message}    
     </div>
-  {/if} -->
+  {/if}
 </div>
 
 
@@ -79,5 +98,10 @@
     padding: 1rem;
     background-color: crimson;
     color: white;
+  }
+
+  .error h4 {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
   }
 </style>

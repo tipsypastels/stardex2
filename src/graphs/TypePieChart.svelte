@@ -22,7 +22,7 @@
     <ul>
       {#each slices as { value, icon, color, percent, count } (value)}
         <li>
-          <strong style={`color: ${color}`}>
+          <strong style="color: {color}">
             <Icon name={icon} group="fas" /> 
             {value}
           </strong>

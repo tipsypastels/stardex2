@@ -30,7 +30,7 @@
 
 <code>
   {#each lines as line}
-    <div class={`line line-${line.type}`}>
+    <div class="line line-{line.type}">
       <pre>{line.content}</pre>
     </div>
   {/each}
