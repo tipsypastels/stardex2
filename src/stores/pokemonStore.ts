@@ -17,7 +17,7 @@ import {
 } from 'rxjs/operators';
 import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
-import { from, of, pipe, EMPTY } from 'rxjs';
+import { from, of, pipe, EMPTY, iif } from 'rxjs';
 import currentCount from '../util/currentCount';
 import toGraphSlices from '../util/toGraphSlices';
 import storeLocally from '../util/storeLocally';
@@ -124,6 +124,7 @@ export const locationDistribution = analytics.pipe(
             entry: { 
               ...entry, 
               levelRange: location.levelRange, 
+              rarity: location.rarity,
             }, 
           }))
         )  
@@ -132,12 +133,29 @@ export const locationDistribution = analytics.pipe(
       mergeMap(group$ => 
         group$.pipe(
           reduce(
-            (acc, entry) => ({ ...acc, entries: [...acc.entries, entry]}),
-            ({ location: group$.key, entries: [] as PokemonEntry[] }),
+            (acc, entry) => {
+              const newAcc = { 
+                ...acc,
+                entries: [...acc.entries, entry],
+              };
+              
+              if (acc.totalRarity && entry.rarity) {
+                newAcc.totalRarity! += entry.rarity;
+              } else if (entry.rarity) {
+                newAcc.totalRarity = entry.rarity;
+              }
+
+              return newAcc;
+            },
+            ({ 
+              location: group$.key, 
+              entries: [] as PokemonEntry[],
+              totalRarity: undefined as number | undefined,
+            }),
           )
         )  
       ),
-      toArray(),
+      toArray(), 
       map(array => 
         array.sort((a, b) => 
           a.location.localeCompare(b.location),

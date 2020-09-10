@@ -1,6 +1,7 @@
 <script lang="ts">
 import CodeBlock from '../generic/CodeBlock.svelte';
   import EntryListing from '../generic/EntryListing.svelte';
+import Icon from '../generic/Icon.svelte';
   import { 
     locationDistribution, 
     locationUnsetEntries,
@@ -8,13 +9,22 @@ import CodeBlock from '../generic/CodeBlock.svelte';
 </script>
 
 {#if $locationDistribution.length}
-  {#each $locationDistribution as { location, entries } (location)}
+  {#each $locationDistribution as { 
+    location, entries, totalRarity 
+  } (location)}
     <div class="location">
       <h3 class="location-title">
         <span>
           {location}
         </span>
       </h3>
+
+      {#if typeof totalRarity !== 'undefined' && totalRarity !== 100}
+        <div class="total-rarity-warning">
+          <Icon name="exclamation-circle" group="fas"/>
+          Rarities for this location don't add up to 100%.
+        </div>
+      {/if}
 
       <div class="entries">
         {#each entries as entry (entry.name)}
@@ -56,15 +66,15 @@ import CodeBlock from '../generic/CodeBlock.svelte';
       `} />
 
       <p>
-        You can also include a level range for the encounter in question.
+        You can also include a level range and rarity for the encounter in question.
       </p>
 
       <CodeBlock code={`
         Ducklett 
-        - at Route 53, 1-3
-        - at Mossy Pond, 5-7
+        - at Route 53, level 1-3, rarity 100%
+        - at Mossy Pond, level 5-7, rarity 50%
         Swanna
-        - at Mossy Pond, 5-7
+        - at Mossy Pond, level 5-7, rarity: 50%
       `} />
     </div>
 {/if}
@@ -90,5 +100,11 @@ import CodeBlock from '../generic/CodeBlock.svelte';
 
     border-bottom: 1px solid var(--divider-light);
     margin: 0 20px;
+  }
+
+  .total-rarity-warning {
+    color: var(--highlight);
+    font-weight: bold;
+    font-size: 0.9rem;
   }
 </style>

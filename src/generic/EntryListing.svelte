@@ -1,8 +1,22 @@
 <script lang="ts">
   import TypeName from './TypeName.svelte';
-  import type { PokemonEntry } from "../models/pokemonEntry";
+  import type { LocationEntry, PokemonEntry } from "../models/pokemonEntry";
 
-  export let entry: PokemonEntry & { levelRange?: string };
+  export let entry: PokemonEntry & Omit<LocationEntry, 'name'>;
+
+  $: parens = (function() {
+    let parens: string[] = [];
+
+    if (entry.levelRange) {
+      parens.push(`Lv. ${entry.levelRange.replace(/\b-\b/, ' - ')}`)
+    }
+
+    if (entry.rarity) {
+      parens.push(`${entry.rarity}%`);
+    }
+
+    return parens;
+  })();
 </script>
 
 <div class="entry">
@@ -17,9 +31,9 @@
     <h4>
       {entry.name}
 
-      {#if entry.levelRange}
-        <span class="level-range">
-          (Lv. {entry.levelRange.replace(/\b-\b/, ' - ')})
+      {#if parens.length}
+        <span class="parens">
+          ({parens.join(', ')})
         </span>
       {/if}
     </h4>
@@ -45,7 +59,7 @@
     margin-bottom: 0.5rem;
   }
 
-  .level-range {
+  .parens {
     font-size: 95%;
     font-weight: 400;
   }

@@ -3,7 +3,7 @@
   export let group: 'fal' | 'fas' | 'far' | 'fab' = 'far';
   export let fw = true;
 
-  let className: string | undefined;
+  let className = '';
   export { className as class };
 </script>
 

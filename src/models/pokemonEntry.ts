@@ -21,6 +21,7 @@ export type PokemonEntry = {
 export type LocationEntry = {
   name: string;
   levelRange?: string;
+  rarity?: number;
 }
 
 export class EntryError extends Error {
