@@ -11,6 +11,7 @@ import {
   toArray,
   groupBy,
   catchError,
+  mapTo,
 } from 'rxjs/operators';
 import { pokemonEntriesFrom, PokemonEntry } from '../models/pokemonEntry';
 import distinctUntilPause from '../util/distinctUntilPause';
@@ -32,11 +33,11 @@ export const inputAutosave = input.pipe(
 );
 
 export const inputErrors = input.pipe(
-  distinctUntilPause(500),
+  distinctUntilPause(750),
   flatMap(value => 
     of(value).pipe(
       map(pokemonEntriesFrom),
-      map(() => null), // we don't need the value
+      mapTo(null), // we don't need the value
       catchError(e => of(e)),
     )  
   ),

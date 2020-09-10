@@ -1,13 +1,25 @@
-import type { PaneName } from '../panes/panes';
 import SvelteSubject from '../util/SvelteSubject';
 import storeLocally from '../util/storeLocally';
-import PANE_TO_COMPONENT from '../panes/panes';
 import { pluck } from 'rxjs/operators';
 
-type PaneSide = 'left' | 'right';
+import Editor from '../panes/Editor.svelte';
+import Intro from '../panes/Intro.svelte';
+import Rundown from '../panes/Rundown.svelte';
+import Locations from '../panes/Locations.svelte';
+
+const PANE_TO_COMPONENT = {
+  intro: Intro,
+  editor: Editor,
+  rundown: Rundown,
+  locations: Locations,
+};
+
+export const PANE_NAMES = Object.keys(PANE_TO_COMPONENT) as PaneName[];
+export type PaneName = keyof typeof PANE_TO_COMPONENT;
+export type PaneSide = 'left' | 'right';
 
 export class PaneSubject extends SvelteSubject<
-  {
+{
     name: PaneName;
     side: PaneSide;
     lsKey: string;
@@ -19,16 +31,8 @@ export class PaneSubject extends SvelteSubject<
     super({ side, lsKey, name });
   }
 
-  get name() {
-    return this.value.name;
-  }
-
-  get side() {
-    return this.value.side;
-  }
-
   get component() {
-    return PANE_TO_COMPONENT[this.name];
+    return PANE_TO_COMPONENT[this.value.name];
   }
 
   goto(name: PaneName) {

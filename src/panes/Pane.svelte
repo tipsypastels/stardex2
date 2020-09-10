@@ -1,7 +1,7 @@
 <script lang="ts">
-  import PANE_TO_COMPONENT, { PANE_NAMES } from './panes';
+  import { PANE_NAMES } from '../stores/paneStore';
   import type { PaneSubject } from '../stores/paneStore';
-  import type { PaneName } from './panes';
+  import type { PaneName } from '../stores/paneStore';
 
   export let pane: PaneSubject;
 
