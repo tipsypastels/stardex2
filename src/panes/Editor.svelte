@@ -74,9 +74,6 @@
     font-size: 1rem;
     font-family: "Ubuntu Mono";
 
-    padding: 0.5rem;
-    box-sizing: border-box;
-
     flex-grow: 1;
   }
 
@@ -98,6 +95,11 @@
   @media screen and (min-width: 768px) {
     .editor {
       flex-direction: column;
+    }
+
+    textarea {
+      padding: 0.5rem;
+      box-sizing: border-box;
     }
   }
 </style>
