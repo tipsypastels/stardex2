@@ -59,7 +59,7 @@
 
       <CodeBlock code={`
         Ducklett 
-        - at Route 53, 
+        - at Route 53
         - at Mossy Pond
         Swanna
         - at Mossy Pond
