@@ -39,9 +39,11 @@
   );
 </script>
 
-<h1>
-  Stardex
-</h1>
+{#if $media.tablet}
+  <h1>
+    Stardex
+  </h1>
+{/if}
 
 <p>
   Welcome to Stardex! This is a tool designed to help you build balanced Pokédexes for Pokémon fangames. 

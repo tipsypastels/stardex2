@@ -17,54 +17,54 @@
   }
 </script>
 
-<button class="expand-panes" on:click={() => isExpanded = !isExpanded}>
-  <Icon name="bars" />
-</button>
-
 <main class="pane">
-  <svelte:component this={pane.component} />
+  <h1 on:click={() => isExpanded = !isExpanded}>
+    {$pane.name}<span class="menu"><Icon name="caret-down" group="fas" /></span>
+  </h1>
+
+  <div class="pane-body">
+    <svelte:component this={pane.component} />
+  </div>
 </main>
 
-{#if isExpanded}
-  <div class="pane-nav-wrapper" on:click|self={close}>
-    <nav class="pane-nav">
-      {#each PANE_NAMES as name}
-        <button 
-          class="pane-button" 
-          class:active={name === $pane.name}
-          on:click={() => goto(name)}
-        >
-          <div class="pane-icon">
-            <Icon name={PANE_TO_METADATA[name].icon} />
-          </div>
-  
-          <div class="pane-label">{name}</div>
-        </button>
-      {/each}
-    </nav>
-  </div>
-{/if}
+<div 
+  class="pane-nav-wrapper" 
+  class:expanded={isExpanded}
+  on:click|self={close}
+>
+  <nav class="pane-nav">
+    {#each PANE_NAMES as name}
+      <button 
+        class="pane-button" 
+        class:active={name === $pane.name}
+        on:click={() => goto(name)}
+      >
+        <div class="pane-icon">
+          <Icon name={PANE_TO_METADATA[name].icon} />
+        </div>
+
+        <div class="pane-label">{name}</div>
+      </button>
+    {/each}
+  </nav>
+</div>
 
 <style>
-  .expand-panes {
-    position: fixed;
-    bottom: 0;
-    right: 0;
+  h1 {
+    text-transform: capitalize;
+  }
 
-    margin: 1rem;
+  .menu {
+    font-size: 1.2rem;
+  }
 
-    background-color: var(--highlight);
-    color: white;
-    border: none;
-    font-size: 1.7rem;
-
-    height: 55px;
-    width: 55px;
-    
+  .pane {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+    flex-direction: column;
+  }
+
+  .pane-body {
+    flex-grow: 1;
   }
 
   .pane-nav-wrapper {
@@ -74,6 +74,12 @@
 
     width: 100%;
     height: 100%;
+
+    pointer-events: none;
+  }
+
+  .pane-nav-wrapper.expanded {
+    pointer-events: initial;
   }
 
   .pane-nav {
@@ -91,6 +97,13 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 1rem;
+
+    transition: transform 0.25s ease-in-out;
+    transform: translateY(105%);
+  }
+
+  .pane-nav-wrapper.expanded .pane-nav {
+    transform: translateY(0);
   }
 
   .pane-button {
