@@ -71,10 +71,10 @@
 
       <CodeBlock code={`
         Ducklett 
-        - at Route 53, level 1-3, rarity 100%
-        - at Mossy Pond, level 5-7, rarity 50%
+        - at Route 53, level = 1-3, rarity = 100%
+        - at Mossy Pond, level = 5-7, rarity = 50%
         Swanna
-        - at Mossy Pond, level 5-7, rarity: 50%
+        - at Mossy Pond, level = 5-7, rarity = 50%
       `} />
     </div>
 {/if}
