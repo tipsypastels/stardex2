@@ -59,6 +59,8 @@
 
 <style>
   .editor {
+    flex-grow: 1;
+    
     display: flex;
     flex-direction: column-reverse;
 
@@ -70,6 +72,9 @@
     border: none;
     resize: none;
     outline: none;
+
+    padding: 0;
+    padding-top: 0.5rem;
 
     font-size: 1rem;
     font-family: "Ubuntu Mono";

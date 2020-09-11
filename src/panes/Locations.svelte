@@ -1,7 +1,7 @@
 <script lang="ts">
-import CodeBlock from '../generic/CodeBlock.svelte';
+  import CodeBlock from '../generic/CodeBlock.svelte';
   import EntryListing from '../generic/EntryListing.svelte';
-import Icon from '../generic/Icon.svelte';
+  import Icon from '../generic/Icon.svelte';
   import { 
     locationDistribution, 
     locationUnsetEntries,
