@@ -109,7 +109,7 @@
     }
 
     textarea {
-      padding: 0.5rem;
+      padding: 1rem;
       box-sizing: border-box;
     }
   }
