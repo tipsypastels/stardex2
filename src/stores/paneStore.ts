@@ -6,6 +6,7 @@ import Editor from '../panes/Editor.svelte';
 import Intro from '../panes/Intro.svelte';
 import Rundown from '../panes/Rundown.svelte';
 import Locations from '../panes/Locations.svelte';
+import Types from '../panes/Types.svelte';
 
 export const PANE_TO_METADATA = {
   intro: {
@@ -19,6 +20,10 @@ export const PANE_TO_METADATA = {
   rundown: {
     icon: 'list-ol',
     component: Rundown,
+  },
+  types: {
+    icon: 'fire',
+    component: Types,
   },
   locations: {
     icon: 'map-marker',
