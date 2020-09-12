@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition';
   import { media } from 'svelte-match-media';
+  import { flash } from './stores/flashStore';
   import Editor from './panes/Editor.svelte';
   import Pane from './panes/Pane.svelte';
 
@@ -14,6 +16,17 @@
   {/if}
   
   <Pane />
+
+  {#if $flash}
+    <div 
+      class="flash" 
+      style="background-color: {$flash?.color};" 
+      transition:fly={{ y: 200, duration: 1000 }}
+      role="alert"
+    >
+      {$flash?.message}
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -27,6 +40,21 @@
 
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .flash {
+    position: fixed;
+    bottom: 1rem;
+
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   @media screen and (min-width: 768px) {
