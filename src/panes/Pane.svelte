@@ -5,8 +5,7 @@
   import type { PaneName } from '../stores/paneStore';
   import PaneBrowser from './PaneBrowser.svelte';
   import PaneMobile from './PaneMobile.svelte';
-
-  export let pane: PaneSubject;
+  import { pane } from '../stores/paneStore';
 
   const paneLocalStorage = pane.storeLocally();
   $paneLocalStorage; // subscribe

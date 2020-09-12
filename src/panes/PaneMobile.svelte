@@ -17,7 +17,7 @@
   }
 </script>
 
-<main class="pane">
+<main class="pane" class:editor={$pane.name === 'editor'}>
   <h1 on:click={() => isExpanded = !isExpanded}>
     {$pane.name}<span class="menu"><Icon name="caret-down" group="fas" /></span>
   </h1>
@@ -61,6 +61,12 @@
   .pane {
     display: flex;
     flex-direction: column;
+    padding: 1rem;
+  }
+
+  .pane.editor {
+    background-color: #222;
+    color: white;
   }
 
   .pane-body {

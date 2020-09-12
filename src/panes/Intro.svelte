@@ -6,7 +6,7 @@
   import { flatMap, map, mergeAll, pluck, startWith } from 'rxjs/operators';
   import { media } from 'svelte-match-media';
   import { pokemonEntriesFrom } from '../models/pokemonEntry';
-  import { leftPane, rightPane } from '../stores/paneStore';
+  import { pane } from '../stores/paneStore';
   import toGraphSlices from '../util/toGraphSlices';
 
   const sampleCode = `
@@ -51,9 +51,9 @@
 
 <p>
   {#if $media.tablet}
-    Start by entering some Pokémon names in the <strong>Editor</strong> pane.
+    Start by entering some Pokémon names in the <strong>Editor</strong> to the left.
   {:else}
-    Start by <button on:click={() => leftPane.goto('editor')}>switching to the editor tab</button> and entering some Pokémon names!
+    Start by <button on:click={() => pane.goto('editor')}>switching to the editor tab</button> and entering some Pokémon names!
   {/if}
 
   You can leave blank lines for spacing or comment lines with <code>#</code>
@@ -66,7 +66,7 @@
 <CodeBlock code={sampleCode} />
 
 <p>
-  You can visit the <button on:click={() => rightPane.goto('rundown')}>rundown</button> tab to get totals of Pokémon, types, and other useful numbers, along with a graph of the type distribution. In the case of the above list, the graph will look like this:
+  You can visit the <button on:click={() => pane.goto('rundown')}>rundown</button> tab to get totals of Pokémon, types, and other useful numbers, along with a graph of the type distribution. In the case of the above list, the graph will look like this:
 </p>
 
 <TypePieChart types={$typeDistribution} />

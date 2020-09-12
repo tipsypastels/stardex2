@@ -12,40 +12,43 @@ export const PANE_TO_METADATA = {
   intro: {
     icon: 'chalkboard-teacher',
     component: Intro,
+    isMobileOnlyPane: false,
   },
   editor: {
     icon: 'file-edit',
     component: Editor,
+    isMobileOnlyPane: true,
   },
   rundown: {
     icon: 'list-ol',
     component: Rundown,
+    isMobileOnlyPane: false,
   },
   types: {
     icon: 'fire',
     component: Types,
+    isMobileOnlyPane: false,
   },
   locations: {
     icon: 'map-marker',
     component: Locations,
+    isMobileOnlyPane: false,
   },
 };
 
 export const PANE_NAMES = Object.keys(PANE_TO_METADATA) as PaneName[];
 export type PaneName = keyof typeof PANE_TO_METADATA;
-export type PaneSide = 'left' | 'right';
 
 export class PaneSubject extends SvelteSubject<
 {
     name: PaneName;
-    side: PaneSide;
     lsKey: string;
   }
 > {
-  constructor(side: PaneSide, fallback: PaneName) {
-    const lsKey = `stardex2-pane-${side}`;
+  constructor(fallback: PaneName) {
+    const lsKey = `stardex2-pane`;
     const name = (localStorage.getItem(lsKey) || fallback) as PaneName;
-    super({ side, lsKey, name });
+    super({ lsKey, name });
   }
 
   get component() {
@@ -68,5 +71,4 @@ export class PaneSubject extends SvelteSubject<
   }
 }
 
-export const leftPane = new PaneSubject('left', 'intro');
-export const rightPane = new PaneSubject('right', 'editor');
+export const pane = new PaneSubject('intro');

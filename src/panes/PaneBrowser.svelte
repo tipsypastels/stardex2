@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PANE_NAMES } from '../stores/paneStore'; 
+  import { PANE_NAMES, PANE_TO_METADATA } from '../stores/paneStore'; 
   import type { PaneSubject } from "../stores/paneStore";
   export let pane: PaneSubject;
 </script>
@@ -7,13 +7,15 @@
 <section class="pane">
   <nav class="pane-nav">
     {#each PANE_NAMES as name}
-      <button
-        class="pane-button"
-        class:active={$pane.name === name}
-        on:click={() => pane.goto(name)}
-      >
-        {name}
-      </button>
+      {#if !PANE_TO_METADATA[name].isMobileOnlyPane}
+        <button
+          class="pane-button"
+          class:active={$pane.name === name}
+          on:click={() => pane.goto(name)}
+        >
+          {name}
+        </button>
+      {/if}
     {/each}
   </nav>
 
@@ -27,7 +29,6 @@
     padding: 1rem;
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid var(--divider);
     overflow-y: scroll;
 
     display: flex;

@@ -66,9 +66,15 @@
 
     width: 100%;
     height: 100%;
+
+    background-color: #222;
+    color: white;
   }
 
   textarea {
+    background-color: transparent;
+    color: inherit;
+
     border: none;
     resize: none;
     outline: none;
@@ -76,7 +82,7 @@
     padding: 0;
     padding-top: 0.5rem;
 
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-family: "Ubuntu Mono";
 
     flex-grow: 1;

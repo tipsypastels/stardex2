@@ -10,7 +10,7 @@
   } from '../stores/pokemonStore';
 </script>
 
-<div class="stats">
+<!-- <div class="stats">
   <div class="stat">
     <h1>{$pokemonCount}</h1>
     <small>Pokémon</small>
@@ -57,4 +57,4 @@
   .stat small {
     font-size: 0.9rem;
   }
-</style>
+</style> -->

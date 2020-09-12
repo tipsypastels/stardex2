@@ -1,7 +1,7 @@
 <script lang="ts">
   import { media } from 'svelte-match-media';
+  import Editor from './panes/Editor.svelte';
   import Pane from './panes/Pane.svelte';
-  import { leftPane, rightPane } from './stores/paneStore';
 
   let height: number;
 </script>
@@ -9,11 +9,11 @@
 <svelte:window bind:innerHeight={height} />
 
 <div class="app" style="height: {height}px;">
-  <Pane pane={leftPane} />
-
   {#if $media.tablet}
-    <Pane pane={rightPane} />
+    <Editor />
   {/if}
+  
+  <Pane />
 </div>
 
 <style>
@@ -27,14 +27,11 @@
 
     display: grid;
     grid-template-columns: 1fr;
-    column-gap: 1rem;
-
-    padding: 1rem;
   }
 
   @media screen and (min-width: 768px) {
     .app {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 450px 1fr;
     }
   }
 </style>
