@@ -43,7 +43,7 @@ export function didYouMeanVanillaMon({ name, isNoDerive }: PokemonEntry) {
 
   const result = findBestMatch(name.toLowerCase(), vanillaMonNames);
 
-  if (result.bestMatch.rating > 0.8) {
+  if (result.bestMatch.rating > 0.7) {
     return vanillaMonsByName[result.bestMatch.target].name;
   }
 }
